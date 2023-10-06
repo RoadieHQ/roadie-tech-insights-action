@@ -88,7 +88,10 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
             : `scorecards/${scorecardId}/action`;
         const triggerResponse = yield (0, node_fetch_1.default)(`${API_URL}/${urlPostfix}`, {
             method: 'POST',
-            headers: { Authorization: `Bearer ${apiToken}` },
+            headers: {
+                Authorization: `Bearer ${apiToken}`,
+                'content-type': 'application/json; charset=utf-8',
+            },
             body: JSON.stringify({
                 type: ACTION_TYPE,
                 payload: {
