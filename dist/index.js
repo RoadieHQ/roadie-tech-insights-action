@@ -49,6 +49,7 @@ const node_fetch_1 = __importDefault(__nccwpck_require__(4429));
 const github_1 = __nccwpck_require__(5438);
 const catalog_model_1 = __nccwpck_require__(4094);
 const isEmpty_1 = __importDefault(__nccwpck_require__(3912));
+const isScorecardResponse = (it) => !('checkResults' in it.data);
 const API_URL = 'https://api.roadie.so/api/tech-insights/v1';
 const ACTION_TYPE = 'run-on-demand';
 const run = () => __awaiter(void 0, void 0, void 0, function* () {
@@ -103,7 +104,7 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
                 },
             }),
         });
-        return yield triggerResponse.json();
+        return (yield triggerResponse.json());
     });
     try {
         const content = fs.readFileSync(catalogInfoPath, 'utf8');
@@ -115,7 +116,14 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
         }
         const parsedManifest = roadieManifest.map(yamlDoc => yamlDoc.toJS());
         const onDemandResult = yield triggerOnDemandRun(parsedManifest);
-        console.log(onDemandResult);
+        if (onDemandResult && isScorecardResponse(onDemandResult)) {
+            console.log(JSON.stringify(onDemandResult));
+            console.log(Object.values(onDemandResult.data).map(result => result.checkResults.map(individualResult => individualResult.checkResults.result)));
+        }
+        if (onDemandResult && !isScorecardResponse(onDemandResult)) {
+            console.log(JSON.stringify(onDemandResult));
+            console.log(onDemandResult.data.checkResults.map(res => res.checkResults.result));
+        }
         return;
     }
     catch (error) {
