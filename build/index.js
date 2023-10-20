@@ -137,6 +137,7 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
                 name: checkResult.check.name,
                 description: checkResult.check.description,
             })));
+            core.debug(checkResults);
             const scorecard = onDemandResult.data.scorecard;
             const successfulChecks = checkResults.filter(it => it.result === ':white_check_mark:');
             const scorecardResult = `${successfulChecks.length} / ${checkResults.length}`;
@@ -144,7 +145,7 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
                 yield comment({
                     id: scorecardId,
                     repoToken,
-                    content: md.render(`
+                    content: `
 ## Scorecard Results
 **Scorecard**: ${scorecard.title}\n
 **Description**: ${scorecard.description}\n\n
@@ -153,13 +154,15 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
 ${successfulChecks.length === checkResults.length
                         ? ':white_check_mark:'
                         : ':no_entry_sign:'}\n
-${scorecardResult} checks succeeded.\n           
+${scorecardResult} checks succeeded.           
           
 #### Check Results       
 | Check         | Description | Result |
 |--------------|-----|:-----------:|
-${checkResults.map(it => `| ${it.name} |  ${it.description} | ${it.result} |\n`)}
-          `),
+${checkResults
+                        .map(it => `| ${it.name} |  ${it.description} | ${it.result} |`)
+                        .join('\n')}
+          `,
                 });
             }
             catch (e) {
