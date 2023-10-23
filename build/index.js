@@ -137,7 +137,7 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
                 name: checkResult.check.name,
                 description: checkResult.check.description,
             })));
-            core.debug(checkResults);
+            core.debug(JSON.stringify(checkResults));
             const scorecard = onDemandResult.data.scorecard;
             const successfulChecks = checkResults.filter(it => it.result === ':white_check_mark:');
             const scorecardResult = `${successfulChecks.length} / ${checkResults.length}`;
