@@ -17,8 +17,9 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - run: yarn install
+      - run: yarn lint
+      - run: yarn lint:security
       - run: yarn build
-
       - name: Test Roadie Tech Insights on-demand Scorecard API call
         id: test-action-scorecard
         uses: ./
